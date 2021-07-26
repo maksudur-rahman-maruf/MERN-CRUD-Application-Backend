@@ -58,7 +58,31 @@ db.once('open', () => {
             res.send(result);
         });
     });
-   
+
+
+    app.put("/update", async (req, res) => {
+        const newEmployeeName = req.body.newEmployeeName;
+        const id = req.body.id;
+
+        try {
+            await Employee.findById(id, (err, updatedEmployee) => {
+                updatedEmployee.name = newEmployeeName;
+                updatedEmployee.save();
+                res.send("update");
+            })
+        } catch (err) {
+            console.log(err);
+        }
+    });
+
+
+    app.delete("/delete/:id", async (req, res) => {
+        const id = req.params.id;
+
+        await Employee.findByIdAndRemove(id).exec();
+        res.send("deleted");
+    })
+
 });
 
 
